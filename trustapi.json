@@ -1,0 +1,424 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trust API",
+    "description": "API Specification",
+    "contact": {
+      "email": "dev@trustconsultinggroup.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://test.trustconsultinggroup.com/api",
+      "description": "Test API"
+    },
+    {
+      "url": "https://trustconsultinggroup.com/api",
+      "description": "Production API"
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": [
+          "Core Methods"
+        ],
+        "summary": "Ping the API",
+        "description": "Heartbeat method",
+        "operationId": "ping",
+        "parameters": [
+          {
+            "name": "x-trust-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingReturnObject"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "status": "200",
+                      "message": "api is up",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paradox_get_employee": {
+      "get": {
+        "tags": [
+          "Paradox Methods"
+        ],
+        "summary": "Search for Employee",
+        "description": "Search for employee and return onboarding status",
+        "operationId": "paradox_get_employee",
+        "parameters": [
+          {
+            "name": "x-trust-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-trust-client-key",
+            "in": "header",
+            "description": "Client UUID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "candidateid",
+            "in": "query",
+            "description": "Paradox 14-digit candidateid ",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParadoxGetEmployeeReturnObject"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "status": "200",
+                      "message": "employee found",
+                      "data": {
+                        "clientid": "1",
+                        "locationid": "254",
+                        "employeeid": "2807",
+                        "candidateid": "99999999999999",
+                        "nsn": "99999",
+                        "firstname": "Test",
+                        "lastname": "Comp",
+                        "dateofbirth": "1974-01-19",
+                        "emailaddress": "themurph2k@gmail.com",
+                        "dateadded": "2020-06-22",
+                        "onboardinglink": "2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+                        "onboardinglinksent": "2020-06-22",
+                        "allitemscompleted": "0",
+                        "onboardingurl": "https://test.trustconsultinggroup.com/login_employee.php?id=2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+                        "onboardinglinkexpired": "Yes"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee Not Found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "status": "404",
+                      "message": "employee not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paradox_add_employee": {
+      "post": {
+        "tags": [
+          "Paradox Methods"
+        ],
+        "summary": "Add New Employee to Onboarding",
+        "description": "Add a new employee and return the onboarding URL",
+        "operationId": "paradox_add_employee",
+        "parameters": [
+          {
+            "name": "x-trust-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-trust-client-key",
+            "in": "header",
+            "description": "Client UUID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "encoding": {},
+              "schema": {
+                "required": [
+                  "nsn",
+                  "firstname",
+                  "lastname",
+                  "hiredate",
+                  "startdate",
+                  "emailaddress",
+                  "candidateid"
+                ],
+                "type": "object",
+                "properties": {
+                  "nsn": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "hiredate": {
+                    "type": "string"
+                  },
+                  "startdate": {
+                    "type": "string"
+                  },
+                  "emailaddress": {
+                    "type": "string"
+                  },
+                  "candidateid": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParadoxAddEmployeeReturnObject"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "status": "200",
+                      "message": "employee added",
+                      "data": {
+                        "clientid": "118",
+                        "locationid": "258",
+                        "clientname": "Paradox Test One LLC",
+                        "nsn": "99991",
+                        "employeeid": "2812",
+                        "candidateid": "99999999999998",
+                        "onboardingguid": "2812-29E836BB-372E-4A7F-B9B9-FE2F21F689C5",
+                        "onboardingurl": "https://test.trustconsultinggroup.com/login_employee.php?id=2812-29E836BB-372E-4A7F-B9B9-FE2F21F689C5"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in Operation",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "status": "400",
+                      "message": "candidateid exists",
+                      "data": null
+                    }
+                  },
+                  "Example 2": {
+                    "value": {
+                      "status": "400",
+                      "message": "nsn not found",
+                      "data": null
+                    }
+                  },
+                  "Example 3": {
+                    "value": {
+                      "status": "400",
+                      "message": "firstname required",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Core Methods",
+      "description": ""
+    },
+    {
+      "name": "Paradox Methods",
+      "description": "Methods related to McHire Integration"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "PingReturnObject": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "api is up"
+          },
+          "data": {
+            "type": "object",
+            "example": null
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "status": "200",
+            "message": "api is up",
+            "data": null
+          }
+        }
+      },
+      "ParadoxGetEmployeeReturnObject": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "employee found"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "clientid": "1",
+              "locationid": "254",
+              "employeeid": "2807",
+              "candidateid": "99999999999999",
+              "nsn": "99999",
+              "firstname": "Test",
+              "lastname": "Comp",
+              "dateofbirth": "1974-01-19",
+              "emailaddress": "themurph2k@gmail.com",
+              "dateadded": "2020-06-22",
+              "onboardinglink": "2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+              "onboardinglinksent": "2020-06-22",
+              "allitemscompleted": "0",
+              "onboardingurl": "https://test.trustconsultinggroup.com/login_employee.php?id=2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+              "onboardinglinkexpired": "Yes"
+            }
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "status": "200",
+            "message": "employee found",
+            "data": {
+              "clientid": "1",
+              "locationid": "254",
+              "employeeid": "2807",
+              "candidateid": "99999999999999",
+              "nsn": "99999",
+              "firstname": "Test",
+              "lastname": "Comp",
+              "dateofbirth": "1974-01-19",
+              "emailaddress": "themurph2k@gmail.com",
+              "dateadded": "2020-06-22",
+              "onboardinglink": "2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+              "onboardinglinksent": "2020-06-22",
+              "allitemscompleted": "0",
+              "onboardingurl": "https://test.trustconsultinggroup.com/login_employee.php?id=2807-79AF3F41-DBDA-4534-8C13-2B931C2AA724",
+              "onboardinglinkexpired": "Yes"
+            }
+          }
+        }
+      },
+      "ParadoxAddEmployeeReturnObject": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "employee added"
+          },
+          "data": {
+            "type": "object",
+            "example": null
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "status": "200",
+            "message": "employee added",
+            "data": {
+              "clientid": "118",
+              "locationid": "258",
+              "clientname": "Paradox Test One LLC",
+              "nsn": "99991",
+              "employeeid": "2812",
+              "candidateid": "99999999999998",
+              "onboardingguid": "2812-29E836BB-372E-4A7F-B9B9-FE2F21F689C5",
+              "onboardingurl": "https://test.trustconsultinggroup.com/login_employee.php?id=2812-29E836BB-372E-4A7F-B9B9-FE2F21F689C5"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  }
+}
